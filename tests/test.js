@@ -23,23 +23,53 @@ describe("People", () => {
     });
     it("should create a people entry with valid input", (done) => {
       // your code goes here
-      done();
+      chai
+      .request(app)
+      .post('/api/v1/people')
+      .send({ 
+        name: "Maria",
+        age: 25
+      }).end((err, res) => {
+        res.body.should.include({msg:'A person record was added'});
+        done();
+      });
     });
   });
   describe("get /api/v1/people", () => {
     it(`should return an array of person entries of length ${this.lastIndex + 1}`, (done) => {
-           // your code goes here
-           done();
+       // your code goes here
+        chai
+        .request(app)
+        .get('/api/v1/people')
+        .end((err, res) => {
+          res.body.should.be.an('object');
+          done();
+        });
     });
   });
   describe("get /apl/v1/people/:id", () => {
     it("should return the entry corresponding to the last person added.", (done) => {
       // your code goes here
-      done();
+      chai
+      .request(app)
+      .get('/api/v1/people/:id')
+      .send({  index: 0 })
+      .end((err, res) => {
+        res.body.should.be.an('object');
+        done();
+      });
     });
     it("should return an error if the index is >= the length of the array", (done) => {
             // your code goes here
-            done();
+        chai
+        .request(app)
+        .get('/api/v1/people/:id')
+        .send({ index : 10})
+        .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.be.an('object');
+          done();
+        });
     });
   });
 });
